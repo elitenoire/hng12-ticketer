@@ -1,33 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useIndexedDB } from '@/hooks/use-indexed-db'
 import type { TicketType } from '@/types'
 
 const DB_NAME = 'TicketsDB'
 const STORE_NAME = 'tickets'
 const DB_VERSION = 1
 
+const initDB = (db: IDBDatabase) => {
+  const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
+  // Create a unique compound index for email and name
+  store.createIndex('emailAndName', ['email', 'name'], { unique: true })
+  store.createIndex('email', 'email', { unique: false })
+}
+
 export function useTicketsDB() {
-  const [db, setDb] = useState<IDBDatabase | null>(null)
-
-  useEffect(() => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onerror = (event) => {
-      console.error('IndexedDB error:', event)
-    }
-
-    request.onsuccess = (event) => {
-      setDb((event.target as IDBOpenDBRequest).result)
-    }
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result
-      const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
-      // Create a unique compound index for email and name
-      store.createIndex('emailAndName', ['email', 'name'], { unique: true })
-    }
-  }, [])
+  const { pending, error, db } = useIndexedDB(DB_NAME, DB_VERSION, initDB)
 
   const getStore = (mode: IDBTransactionMode) => {
     return new Promise<IDBObjectStore>((resolve, reject) => {
@@ -117,5 +105,5 @@ export function useTicketsDB() {
     }
   }
 
-  return { checkExistingTicket, addTicket, getLastEmail, getTicketsByEmail }
+  return { pending, error, checkExistingTicket, addTicket, getLastEmail, getTicketsByEmail }
 }

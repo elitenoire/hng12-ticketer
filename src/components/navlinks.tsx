@@ -21,8 +21,9 @@ export function NavLinks() {
       {links.map(({ name, href }) => {
         return (
           <a
+            key={name}
             className={cn(
-              'font-display p-2.5 text-lg text-[#B3B3B3]',
+              'p-2.5 font-display text-lg text-[#B3B3B3]',
               name === 'Events' && 'text-white'
             )}
             href={href}
