@@ -5,13 +5,14 @@
   :root {
     --background: 189 87% 6%;
     --foreground: 0 0% 100%;
-    --foreground-alt: 0 0% 98%;
+    --foreground-muted: 0 0% 98%;
+    --foreground-light: 0 0% 85%;
     --card: 180 6% 7%;
     --card-foreground: 0 0% 100%;
     --popover: 180 6% 7%;
     --popover-foreground: 0 0% 100%;
     --primary: 189 67% 43%;
-    --primary-foreground: 0 0% 2%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 100%;
     --secondary-foreground: 223 26% 5%;
     --muted: 190 5% 22%;
@@ -21,7 +22,7 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 188 69% 18%;
-    --input: 180 4% 18%;
+    --input: 189 80% 14%;
     --ring: 189 67% 40%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -34,6 +35,11 @@
 @layer base {
   * {
     @apply border-border;
+  }
+  html,
+  body,
+  #root {
+    @apply h-full;
   }
   body {
     @apply bg-background text-foreground;

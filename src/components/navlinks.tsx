@@ -23,7 +23,7 @@ export function NavLinks() {
           <a
             key={name}
             className={cn(
-              'p-2.5 font-display text-lg text-[#B3B3B3]',
+              'p-2.5 font-display text-lg text-[#B3B3B3] transition-colors hover:text-white',
               name === 'Events' && 'text-white'
             )}
             href={href}
