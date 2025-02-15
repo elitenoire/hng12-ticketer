@@ -1,5 +1,6 @@
 import { Header } from '@/components/header'
 import { Ticketer } from '@/components/ticketer'
+import { Toaster } from '@/components/ui/sonner'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <main className="flex w-full max-w-[700px] flex-1 items-center">
           <Ticketer />
         </main>
+        <Toaster position="top-center" />
       </div>
     </div>
   )

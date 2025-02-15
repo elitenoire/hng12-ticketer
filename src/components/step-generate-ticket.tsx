@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/image-upload'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
 
@@ -15,7 +16,7 @@ type StepGenerateTicketProps = {
   ticket: TicketType
   updateTicket: (newData: Partial<TicketType>) => void
   onBack: () => void
-  onSubmit: (imageUrl: string) => void
+  onSubmit: (imageUrl: File) => Promise<void>
 }
 
 export function StepGenerateTicket({
@@ -25,21 +26,21 @@ export function StepGenerateTicket({
   onSubmit,
 }: StepGenerateTicketProps) {
   const [errors, setErrors] = useState<Partial<TicketType>>({})
-  const [localImgUrl, setLocalImgUrl] = useState<string | null>(null)
+  const [localImage, setlocalImage] = useState<File | null>(null)
 
   const handleImageError = (error: string) => {
     setErrors((prevErrors) => ({ ...prevErrors, imgUrl: error }))
-    setLocalImgUrl(null)
+    setlocalImage(null)
   }
 
-  const handleImageChange = (imageUrl: string) => {
+  const handleImageChange = (image: File) => {
     setErrors((prevErrors) => ({ ...prevErrors, imgUrl: '' }))
-    setLocalImgUrl(imageUrl)
+    setlocalImage(image)
   }
 
   const validateForm = () => {
     const newErrors: Partial<TicketType> = {}
-    if (!localImgUrl) newErrors.imgUrl = 'Profile photo is required'
+    if (!localImage) newErrors.imgUrl = 'Profile photo is required'
     if (!ticket.name) newErrors.name = 'Name is required'
     if (!ticket.email) newErrors.email = 'Email is required'
     else if (!/\S+@\S+\.\S+/.test(ticket.email)) newErrors.email = 'Email is invalid'
@@ -50,7 +51,11 @@ export function StepGenerateTicket({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      onSubmit(localImgUrl!)
+      toast.promise(onSubmit(localImage!), {
+        loading: 'Generating ticket...',
+        success: 'Success! Ticket generated',
+        error: 'Failed to generate ticket',
+      })
     }
   }
 

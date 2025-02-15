@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 
 type ImageUploadProps = {
   id: string
-  onChange?: (image: string) => void
+  onChange?: (image: File) => void
   onError?: (error: string) => void
 }
 
@@ -44,7 +44,7 @@ export function ImageUpload({ id, onChange, onError }: ImageUploadProps) {
       reader.onload = () => {
         const imageUrl = reader.result as string
         setSelectedImage(imageUrl)
-        onChange?.(imageUrl)
+        onChange?.(image)
       }
     },
     [onChange, onError]

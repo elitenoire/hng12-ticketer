@@ -1,16 +1,17 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { Progress } from '@/components/ui/progress'
 import { StepSelectTicket } from '@/components/step-select-ticket'
 import { StepGenerateTicket } from '@/components/step-generate-ticket'
 import { StepDisplayTicket } from '@/components/step-display-ticket'
 
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useTicketsDB } from '@/hooks/use-tickets-db'
+import { upload } from '@/lib/upload'
 import type { TicketType } from '@/types'
 
 import { cn } from '@/lib/utils'
-import { Progress } from '@/components/ui/progress'
 
 const initialData: TicketType = {
   qty: '1',
@@ -41,23 +42,31 @@ export function Ticketer() {
     setStep((prevStep) => prevStep - 1)
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (image: File | null) => {
     try {
       const ticketExists = await checkExistingTicket(ticket)
       if (ticketExists) {
         setError('A ticket with this email and name already exists')
-        return
+        throw new Error('A ticket with this email and name already exists')
       }
-      // TODO: retrieve img upload
-      // send to cloudinary and retrieve img url
-      // if error, throw error
-      // else add ticket + imgUrl to db and go next
-      await addTicket(ticket)
-      handleNext() // setStep(3)
+      if (!image) {
+        setError('Profile photo is required')
+        throw new Error('Profile photo is required')
+      }
+      const res = await upload(image)
+      if ('error' in res) {
+        setError(res.error)
+        throw new Error(res.error)
+      }
+      const newTicket = { ...ticket, imgUrl: res.url }
+      await addTicket(newTicket)
+      setTicket(newTicket)
+      handleNext()
       setError(null)
     } catch (error) {
       console.error('🔴[DB]:Error generating ticket:', error)
-      setError(error as string)
+      setError((error as Error).message)
+      throw error
     }
   }
 
@@ -116,7 +125,11 @@ export function Ticketer() {
         />
       )}
       {step === 3 && <StepDisplayTicket ticket={ticket} onReset={handleReset} />}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && (
+        <p className="!mt-6 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   )
 }
