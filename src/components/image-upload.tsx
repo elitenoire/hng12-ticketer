@@ -51,15 +51,10 @@ export function ImageUpload({ id, onChange, onError }: ImageUploadProps) {
   )
 
   const {
-    acceptedFiles,
     getRootProps,
     getInputProps,
     isDragActive,
-  }: {
-    acceptedFiles: File[]
-  } & DropzoneRootProps &
-    DropzoneInputProps &
-    DropzoneState = useDropzone({
+  }: DropzoneRootProps & DropzoneInputProps & DropzoneState = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
@@ -68,8 +63,6 @@ export function ImageUpload({ id, onChange, onError }: ImageUploadProps) {
     maxSize: 1000 * 1024,
     multiple: false,
   })
-
-  console.log('Accepted Files:', acceptedFiles)
 
   return (
     <div className="rounded-inherit text-foreground-muted group relative size-full overflow-hidden border-4 border-primary/50 bg-border">
@@ -90,7 +83,7 @@ export function ImageUpload({ id, onChange, onError }: ImageUploadProps) {
         <div className="absolute inset-0">
           <img
             src={selectedImage}
-            alt="Image preview"
+            alt="profile photo preview"
             className="size-full object-cover object-center"
           />
         </div>
@@ -98,5 +91,3 @@ export function ImageUpload({ id, onChange, onError }: ImageUploadProps) {
     </div>
   )
 }
-
-export default ImageUpload

@@ -21,6 +21,11 @@ const initialData: TicketType = {
   imgUrl: '',
 }
 const INITIAL_STEP = 1
+const titles: Record<number, string> = {
+  1: 'Ticket Selection',
+  2: 'Attendee Details',
+  3: 'Ready',
+}
 
 export function Ticketer() {
   const [step, setStep] = useLocalStorage<number>('step', INITIAL_STEP)
@@ -87,7 +92,9 @@ export function Ticketer() {
     >
       <div className="space-y-3">
         <div className="flex flex-wrap justify-between gap-3">
-          <h1 className="basis-72 font-display text-2xl md:text-[32px]">Ticket Selection</h1>
+          <h1 className="basis-72 font-display text-2xl capitalize md:text-[32px]">
+            {titles[step]}
+          </h1>
           <p className="text-foreground-muted">Step {step}/3</p>
         </div>
         <Progress value={(step * 100) / 3} className="h-1 w-full rounded-[5px] bg-border" />
