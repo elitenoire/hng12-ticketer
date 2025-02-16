@@ -44,6 +44,8 @@ export function StepGenerateTicket({
     if (!ticket.name) newErrors.name = 'Name is required'
     if (!ticket.email) newErrors.email = 'Email is required'
     else if (!/\S+@\S+\.\S+/.test(ticket.email)) newErrors.email = 'Email is invalid'
+    if (ticket.specialRequest && ticket.specialRequest.length > 150)
+      newErrors.specialRequest = 'Keep it short. Max is 150 characters.'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -85,14 +87,16 @@ export function StepGenerateTicket({
             </div>
           </div>
           <div role="alert" aria-live="polite" className="!mt-0">
-            {!!errors.imgUrl && <p className="mt-8 text-sm text-destructive">{errors.imgUrl}</p>}
+            {!!errors.imgUrl && (
+              <p className="mt-8 text-sm text-destructive sm:text-xs">{errors.imgUrl}</p>
+            )}
           </div>
         </div>
         <Separator className="h-1" />
         <div className="space-y-2">
           <Label
             htmlFor="name"
-            className="text-foreground-muted peer-aria-invalid:text-destructive"
+            className="text-foreground-muted has-[aria-invalid=true]:text-destructive"
           >
             Enter your name
           </Label>
@@ -105,13 +109,15 @@ export function StepGenerateTicket({
             autoFocus={!!errors.name}
           />
           <div role="alert" aria-live="polite" className="!mt-0">
-            {!!errors.name && <p className="mt-1 text-sm text-destructive">{errors.name}</p>}
+            {!!errors.name && (
+              <p className="mt-1 text-sm text-destructive sm:text-xs">{errors.name}</p>
+            )}
           </div>
         </div>
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className="text-foreground-muted peer-aria-invalid:text-destructive"
+            className="text-foreground-muted peer-has-[aria-invalid=true]:text-destructive"
           >
             Enter your email <span className="text-destructive">*</span>
           </Label>
@@ -132,19 +138,21 @@ export function StepGenerateTicket({
             </div>
           </div>
           <div role="alert" aria-live="polite" className="!mt-0">
-            {!!errors.email && <p className="mt-1 text-sm text-destructive">{errors.email}</p>}
+            {!!errors.email && (
+              <p className="mt-1 text-sm text-destructive sm:text-xs">{errors.email}</p>
+            )}
           </div>
         </div>
         <div className="space-y-2">
           <Label
             htmlFor="specialRequest"
-            className="text-foreground-muted peer-aria-invalid:text-destructive"
+            className="text-foreground-muted has-[aria-invalid=true]:text-destructive"
           >
             Special request?
           </Label>
           <Textarea
             id="specialRequest"
-            placeholder="Textarea"
+            placeholder="Textarea (optional)"
             value={ticket.specialRequest}
             onChange={(e) => updateTicket({ specialRequest: e.target.value })}
             className="min-h-32 placeholder:text-[#AAA]"
@@ -153,7 +161,7 @@ export function StepGenerateTicket({
           />
           <div role="alert" aria-live="polite" className="!mt-0">
             {!!errors.specialRequest && (
-              <p className="mt-1 text-sm text-destructive">{errors.specialRequest}</p>
+              <p className="mt-1 text-sm text-destructive sm:text-xs">{errors.specialRequest}</p>
             )}
           </div>
         </div>

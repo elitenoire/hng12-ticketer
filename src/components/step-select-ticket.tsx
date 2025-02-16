@@ -66,7 +66,7 @@ export function StepSelectTicket({ ticket, updateTicket, onNext, onReset }: Step
         </fieldset>
         <div className="space-y-2">
           <Label htmlFor="ticketQty" className="text-foreground-muted">
-            Number of Tickets
+            Number of Tickets:
           </Label>
           <SelectNative
             id="ticketQty"

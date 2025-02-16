@@ -34,12 +34,18 @@ export function Ticketer() {
   const { addTicket, checkExistingTicket, pending, error: dbError } = useTicketsDB()
   const [error, setError] = useState<string | null>(null)
 
+  const resetScroll = () => {
+    window.scrollTo({ top: 110, behavior: 'smooth' })
+  }
+
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1)
+    resetScroll()
   }
 
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1)
+    resetScroll()
   }
 
   const handleSubmit = async (image: File | null) => {
@@ -61,8 +67,8 @@ export function Ticketer() {
       const newTicket = { ...ticket, imgUrl: res.url }
       await addTicket(newTicket)
       setTicket(newTicket)
-      handleNext()
       setError(null)
+      handleNext()
     } catch (error) {
       console.error('🔴[DB]:Error generating ticket:', error)
       setError((error as Error).message)
@@ -73,6 +79,7 @@ export function Ticketer() {
   const handleReset = () => {
     setTicket(initialData)
     setStep(INITIAL_STEP)
+    resetScroll()
   }
 
   const updateTicket = useCallback(
@@ -89,7 +96,11 @@ export function Ticketer() {
   }
 
   if (dbError) {
-    return <div className="container mx-auto p-4">Error: {dbError}</div>
+    return (
+      <div className="container mx-auto rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+        Error: {dbError}
+      </div>
+    )
   }
 
   return (
@@ -125,11 +136,13 @@ export function Ticketer() {
         />
       )}
       {step === 3 && <StepDisplayTicket ticket={ticket} onReset={handleReset} />}
-      {error && (
-        <p className="!mt-6 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-2 text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      <div role="alert" aria-live="polite" className="!mt-0">
+        {error && (
+          <p className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

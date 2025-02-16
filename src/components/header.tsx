@@ -7,8 +7,8 @@ import ArrowSVG from '@/assets/arrow.svg?react'
 
 export function Header() {
   return (
-    <header className="w-full max-w-[1200px] rounded-3xl border border-[#197686] bg-[hsl(191_80%_10%/40%)] px-4 py-3">
-      <div className="flex items-center justify-between">
+    <header className="w-full px-2">
+      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between overflow-hidden rounded-3xl border border-[#197686] bg-[hsl(191_80%_10%/40%)] px-4 py-3">
         <a className="flex items-center gap-3">
           <span className="rounded-xl border bg-[#052F35] px-2 py-1.5">
             <LogoSVG className="size-6" />
