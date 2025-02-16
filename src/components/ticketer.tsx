@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
 
 const initialData: TicketType = {
   qty: '1',
-  type: 'free',
+  type: 'Free',
   name: '',
   email: '',
   specialRequest: '',

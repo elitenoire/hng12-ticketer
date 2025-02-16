@@ -170,7 +170,7 @@ export function StepGenerateTicket({
             Back
           </Button>
           <Button type="submit" className="flex-1 basis-64">
-            Get My Free Ticket
+            Get My {ticket.type} Ticket
           </Button>
         </div>
       </form>

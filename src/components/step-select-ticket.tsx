@@ -7,9 +7,9 @@ import { SelectNative } from '@/components/ui/select-native'
 import { Button } from '@/components/ui/button'
 
 const ticketOptions = [
-  { value: 'free', label: 'Free', description: 'Regular Access' },
-  { value: '100', label: '$100', description: 'VIP Access' },
-  { value: '150', label: '$150', description: 'VVIP Access' },
+  { value: 'Free', price: 'Free', description: 'Regular Access' },
+  { value: 'VIP', price: '$100', description: 'VIP Access' },
+  { value: 'VVIP', price: '$150', description: 'VVIP Access' },
 ]
 
 type StepSelectTicketProps = {
@@ -47,7 +47,7 @@ export function StepSelectTicket({ ticket, updateTicket, onNext, onReset }: Step
             value={ticket.type}
             onValueChange={(value) => updateTicket({ type: value })}
           >
-            {ticketOptions.map(({ value, label, description }) => (
+            {ticketOptions.map(({ value, price, description }) => (
               <label
                 key={`ticketQty-${value}`}
                 className="relative flex cursor-pointer flex-col rounded-lg border-2 border-[#197686] p-3 outline-offset-2 transition hover:border hover:bg-[#2C545B] has-[[data-disabled]]:cursor-not-allowed has-[[data-state=checked]]:border has-[[data-state=checked]]:bg-[#12464E] has-[[data-disabled]]:opacity-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring/70"
@@ -57,7 +57,7 @@ export function StepSelectTicket({ ticket, updateTicket, onNext, onReset }: Step
                   value={value}
                   className="sr-only after:absolute after:inset-0"
                 />
-                <span className="mb-3 text-2xl font-semibold">{label}</span>
+                <span className="mb-3 text-2xl font-semibold">{price}</span>
                 <span className="text-foreground-muted uppercase">{description}</span>
                 <span className="text-foreground-light text-sm">20/25</span>
               </label>
